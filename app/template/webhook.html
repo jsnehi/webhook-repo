@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webhook Action Records</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8; 
+        margin: 0;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #673ab7; 
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background-color: #fff; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f3e5f5; 
+        color: #673ab7; 
+    }
+    tr:nth-child(even) {
+        background-color: #f3e5f5; 
+    }
+    tr:hover {
+        background-color: #e1bee7; 
+    }
+</style>
+</head>
+<body>
+    <h1>Webhook Action Records</h1>
+    <table id="webhook-table">
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Author</th>
+                <th>Action</th>
+                <th>From Branch</th>
+                <th>To Branch</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        function fetchData() {
+            fetch('/webhook/fetch-data') 
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#webhook-table tbody');
+                    tableBody.innerHTML = ''; 
+                    data.forEach(record => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${record.request_id}</td>
+                            <td>${record.author}</td>
+                            <td>${record.action}</td>
+                            <td>${record.from_branch}</td>
+                            <td>${record.to_branch}</td>
+                            <td>${record.timestamp}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+        fetchData();
+        setInterval(fetchData, 15000);
+    </script>
+</body>
+</html>
