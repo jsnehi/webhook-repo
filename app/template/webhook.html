@@ -59,7 +59,7 @@
     </table>
     <script>
         function fetchData() {
-            fetch('/webhook/fetch-data') 
+            fetch('/webhook/') 
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.querySelector('#webhook-table tbody');
